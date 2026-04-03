@@ -1,0 +1,168 @@
+/* 기본 (라이트 모드) 변수 */
+:root { 
+    --bg-color: #f8fafc; 
+    --card-bg: #ffffff; 
+    --text-color: #0f172a; 
+    --muted-color: #64748b; 
+    --border-color: #cbd5e1;
+}
+
+/* 🌙 다크 모드 변수 */
+[data-theme="dark"] {
+    --bg-color: #0f172a; 
+    --card-bg: #1e293b; 
+    --text-color: #f8fafc; 
+    --muted-color: #94a3b8; 
+    --border-color: #334155;
+}
+
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; margin: 0; padding: 0; letter-spacing: -0.015em; -webkit-font-smoothing: antialiased; transition: background-color 0.3s, color 0.3s; }
+.container { max-width: 640px; margin: 40px auto 80px auto; padding: 0 20px; }
+
+/* 상단 UI */
+.top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; min-height: 30px; }
+.theme-btn { background: transparent; border: none; color: var(--muted-color); cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.theme-btn:hover { background: var(--border-color); color: var(--text-color); }
+#authSection { display: flex; align-items: center; justify-content: flex-end; flex-grow: 1; }
+
+.auth-btn { background: transparent; border: none; font-size: 0.9rem; font-weight: 600; color: var(--muted-color); cursor: pointer; transition: color 0.2s; padding: 0; }
+.auth-btn:hover { color: var(--text-color); }
+.user-info { font-size: 0.9rem; font-weight: 500; color: var(--text-color); display: flex; align-items: center; gap: 12px; }
+.logout-text { color: var(--muted-color); font-size: 0.8rem; cursor: pointer; transition: color 0.2s; }
+.logout-text:hover { color: #ef4444; }
+
+.auth-init { display: block; } .auth-init.hidden { display: none; }
+.auth-options { display: flex; gap: 16px; align-items: center; } .auth-options.hidden { display: none; }
+.email-auth-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: flex-end; } .email-auth-form.hidden { display: none; }
+.auth-input-group { display: flex; gap: 6px; } .auth-btn-group { display: flex; gap: 6px; }
+.auth-input { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px; font-size: 0.85rem; width: 110px; outline: none; color: var(--text-color); font-family: inherit; }
+.auth-input:focus { border-color: var(--text-color); }
+.auth-submit-btn { background: var(--text-color); color: var(--card-bg); border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.auth-cancel-btn { background: transparent; color: var(--muted-color); border: none; padding: 6px 8px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; }
+
+/* 입력창 */
+.input-section { margin-bottom: 40px; transition: opacity 0.3s ease; }
+.input-section.disabled { opacity: 0.5; pointer-events: none; }
+.input-box { background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 16px; padding: 24px 24px 20px 24px; transition: all 0.2s ease; }
+.input-box:focus-within { border-color: var(--text-color); box-shadow: 0 6px 16px rgba(0,0,0,0.06); transform: translateY(-2px); }
+textarea { width: 100%; font-size: 1.3rem; font-weight: 500; line-height: 1.6; border: none; background: transparent; outline: none; resize: none; overflow: hidden; color: var(--text-color); }
+
+/* ★ [수정됨] 폰트 변경 및 렌더링 최적화(뭉개짐 방지) */
+textarea::placeholder { 
+    font-family: 'Noto Serif KR', serif; 
+    color: #94a3b8; 
+    font-weight: 500; /* 살짝 두껍게 주어 또렷하게 */
+    letter-spacing: -0.02em; 
+    text-rendering: optimizeLegibility; /* 가독성 최적화 강제 */
+    -webkit-font-smoothing: antialiased; /* 윤곽선 부드럽게 깎기 */
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.input-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; }
+input[type="text"] { width: 60%; font-size: 0.95rem; color: var(--muted-color); border: none; border-bottom: 1px solid var(--border-color); padding: 6px 0; outline: none; background: transparent; transition: border-color 0.2s; }
+input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--text-color); }
+.btn-primary { background-color: var(--text-color); color: var(--card-bg); border: none; padding: 10px 28px; font-size: 0.95rem; font-weight: 600; border-radius: 30px; cursor: pointer; white-space: nowrap; transition: transform 0.15s; }
+.btn-primary:active { transform: scale(0.96); }
+.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* 리스트 헤더 & 검색바 */
+.list-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.filter-tabs { display: flex; gap: 24px; }
+.filter-tab { background: transparent; border: none; font-size: 1.1rem; font-weight: 500; color: var(--muted-color); cursor: pointer; padding: 0 0 12px 0; position: relative; transition: color 0.2s; }
+.filter-tab:hover { color: var(--text-color); }
+.filter-tab.active { color: var(--text-color); font-weight: 600; }
+.filter-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background-color: var(--text-color); border-radius: 2px; }
+
+.search-box { display: flex; align-items: center; gap: 8px; color: var(--muted-color); padding-bottom: 12px; }
+.search-box input { border: none; background: transparent; outline: none; font-size: 0.95rem; color: var(--text-color); font-family: inherit; width: 100px; transition: width 0.3s ease; }
+.search-box input:focus { width: 160px; }
+.search-box input::placeholder { color: #94a3b8; }
+
+/* 문장 카드 */
+.sentence-item { position: relative; margin-bottom: 24px; padding: 28px 24px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; transition: border-color 0.2s ease; }
+.sentence-item:hover { border-color: var(--muted-color); }
+.sentence-content { font-size: 1.25rem; font-weight: 500; line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: var(--text-color); }
+.sentence-bottom { display: flex; margin-top: 16px; padding-right: 30px; }
+.sentence-source { font-size: 0.95rem; font-weight: 500; color: var(--muted-color); word-break: break-all; max-width: 100%; }
+
+/* 점 3개 드롭다운 메뉴 스타일 */
+.card-menu { position: absolute; top: 18px; right: 18px; z-index: 10; }
+.menu-btn { background: transparent; border: none; color: var(--muted-color); cursor: pointer; padding: 4px 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; opacity: 0; }
+.sentence-item:hover .menu-btn, .card-menu:has(.dropdown-content.show) .menu-btn { opacity: 1; }
+.menu-btn:hover { background: var(--bg-color); color: var(--text-color); }
+
+.dropdown-content { position: absolute; right: 0; top: 100%; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: none; flex-direction: column; min-width: 150px; overflow: hidden; transform-origin: top right; animation: scaleIn 0.2s ease; }
+.dropdown-content.show { display: flex; }
+
+@keyframes scaleIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+.dropdown-item { padding: 12px 16px; font-size: 0.9rem; font-weight: 500; color: var(--text-color); border: none; background: transparent; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
+.dropdown-item:hover { background: var(--bg-color); }
+.dropdown-item svg { width: 16px; height: 16px; color: var(--muted-color); }
+.dropdown-item:hover svg { color: var(--text-color); }
+.dropdown-divider { height: 1px; background: var(--border-color); margin: 4px 0; }
+.dropdown-item.delete { color: #ef4444; }
+.dropdown-item.delete svg { color: #ef4444; }
+.dropdown-item.delete:hover { background: #fee2e2; }
+
+/* 우측 하단 그룹 */
+.bottom-right-group { position: absolute; bottom: 12px; right: 20px; display: flex; align-items: center; gap: 12px; }
+.date-wrapper { display: flex; align-items: center; gap: 8px; opacity: 0; transition: opacity 0.3s ease; }
+.sentence-date { font-size: 0.8rem; font-weight: 500; color: var(--muted-color); white-space: nowrap; }
+.badge-mine { font-size: 0.7rem; font-weight: 600; background-color: var(--border-color); color: var(--text-color); padding: 2px 6px; border-radius: 4px; }
+.badge-local { background-color: #fef3c7; color: #b45309; }
+
+.sentence-item:hover .date-wrapper { opacity: 1; }
+
+.like-btn { display: flex; align-items: center; gap: 4px; background: transparent; border: none; color: var(--muted-color); cursor: pointer; padding: 4px 8px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+.like-btn:hover { background: var(--border-color); color: var(--text-color); }
+.like-btn.liked { color: #ef4444; }
+.like-btn:active svg { transform: scale(0.75); }
+
+.more-section { display: flex; justify-content: center; margin-top: 40px; }
+.btn-more { background: transparent; border: 2px solid var(--border-color); color: var(--muted-color); padding: 12px 40px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+.btn-more:hover { border-color: var(--text-color); color: var(--text-color); }
+.btn-more.hidden { display: none; }
+.empty-message { text-align: center; color: var(--muted-color); padding: 40px 0; font-size: 1.1rem; }
+
+.capture-mode { border: none !important; border-radius: 0 !important; background-color: var(--bg-color) !important; padding: 40px !important; }
+.capture-mode .card-menu, .capture-mode .bottom-right-group { display: none !important; }
+.action-btn { background: transparent; color: var(--muted-color); border: none; padding: 8px; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
+.action-btn:hover { background: var(--border-color); color: var(--text-color); }
+
+/* 몰입형 필사 모드 스타일 */
+.transcription-modal { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background-color: var(--bg-color); z-index: 9999; 
+    padding: 40px 20px; box-sizing: border-box; overflow-y: auto; 
+    opacity: 1; transition: opacity 0.4s ease;
+    display: flex; flex-direction: column; align-items: center;
+}
+.transcription-modal.hidden { opacity: 0; pointer-events: none; }
+.transcription-close { 
+    position: fixed; top: 30px; right: 30px; 
+    background: transparent; border: none; color: var(--muted-color); 
+    cursor: pointer; padding: 10px; transition: color 0.2s; z-index: 10000; 
+}
+.transcription-close:hover { color: var(--text-color); }
+.transcription-modal::before, .transcription-modal::after { content: ''; margin: auto; }
+.transcription-container { position: relative; max-width: 800px; width: 100%; text-align: center; padding: 60px 0; box-sizing: border-box; flex-shrink: 0; }
+.transcription-text { font-size: 2rem; font-weight: 400; line-height: 1.8; color: var(--border-color); white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; position: relative; z-index: 1; user-select: none; transition: color 0.3s; }
+.transcription-text span.correct { color: var(--text-color); transition: color 0.1s; }
+.transcription-text span.incorrect { color: #ef4444; opacity: 0.8; }
+.transcription-text span.next-char { border-bottom: 3px solid var(--muted-color); }
+.transcription-text span.composing-char { border-bottom: 3px solid var(--text-color); color: var(--text-color); }
+.transcription-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 2; cursor: text; resize: none; font-size: 16px; color: transparent; background: transparent; border: none; outline: none; }
+.transcription-progress { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 1rem; color: var(--muted-color); font-weight: 500; letter-spacing: 2px; transition: color 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10000; }
+.transcription-text.finished { animation: finishGlow 1.2s ease-out forwards; }
+@keyframes finishGlow { 0% { transform: scale(1); filter: brightness(1); } 30% { transform: scale(1.02); filter: brightness(1.2); } 100% { transform: scale(1); filter: brightness(1); } }
+.transcription-progress svg { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+@keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+@media (max-width: 640px) {
+    textarea { font-size: 1.15rem; } 
+    textarea::placeholder { font-size: 1.1rem; }
+    
+    .transcription-text { font-size: 1.4rem; line-height: 1.7; }
+    .transcription-modal { padding: 60px 20px 100px 20px; }
+}

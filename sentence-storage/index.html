@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문장 보관소</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="문장 보관소">
+    <meta property="og:description" content="영감을 주는 문장을 수집하고 필사하며 간직하세요.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068&auto=format&fit=crop"> <meta property="og:url" content="https://your-app-url.vercel.app">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
+
+    <meta name="description" content="나만의 영감을 주는 문장들을 수집하고, 필사하며, 아름답게 간직하는 문장 보관소입니다.">
+    <meta name="keywords" content="문장보관소, 글귀, 필사, 독서기록, 명언, 다이어리, 문장수집">
+    <link rel="canonical" href="https://sentence-storage.vercel.app/">
+</head>
+<body>
+    <div class="container">
+        <div class="top-header">
+            <button class="theme-btn" onclick="window.toggleTheme()" title="화면 모드 전환">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+            <div id="authSection"></div>
+        </div>
+
+        <div class="input-section" id="inputSection">
+            <form id="sentenceForm">
+                <div class="input-box">
+                    <textarea id="contentInput" rows="1" placeholder="어떤 문장을 기록하시겠습니까?" required maxlength="500"></textarea>
+                    <div class="input-controls">
+                        <input type="text" id="sourceInput" placeholder="출처 (선택 사항)" maxlength="50">
+                        <button type="submit" id="submitBtn" class="btn-primary">기록하기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="list-header">
+            <div class="filter-tabs">
+                <button id="tab-all" class="filter-tab active" onclick="window.setFilter('all')">전체</button>
+                <button id="tab-mine" class="filter-tab" onclick="window.setFilter('mine')">내 문장</button>
+                <button id="tab-liked" class="filter-tab" onclick="window.setFilter('liked')" style="display: none;">좋아요</button>
+            </div>
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="검색">
+            </div>
+        </div>
+
+        <div id="sentenceList"></div>
+
+        <div class="more-section">
+            <button id="loadMoreBtn" class="btn-more hidden" onclick="window.loadMore()">더 보기</button>
+        </div>
+    </div>
+
+    <div id="transcriptionModal" class="transcription-modal hidden">
+        <button class="transcription-close" onclick="window.closeTranscription()">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="transcription-container">
+            <div id="transcriptionText" class="transcription-text"></div>
+            <textarea id="transcriptionInput" class="transcription-input" spellcheck="false"></textarea>
+        </div>
+        <div class="transcription-progress" id="transcriptionProgress">0%</div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
