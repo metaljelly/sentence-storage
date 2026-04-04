@@ -242,3 +242,28 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
     }
     .transcription-modal { padding: 60px 20px 100px 20px; }
 }
+/* 푸터 기본 레이아웃 */
+.main-footer {
+    margin-top: 60px;
+    padding: 30px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 텍스트 스타일 */
+.copyright {
+    font-size: 0.85rem;
+    color: var(--muted-color);
+}
+
+.footer-divider {
+    color: var(--border-color);
+    font-size: 0.8rem;
+}
