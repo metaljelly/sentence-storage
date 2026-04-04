@@ -361,9 +361,22 @@ window.toggleLike = async (id) => {
 /* =========================================
    ✍️ 몰입형 필사(Transcription) 모드 
 ========================================= */
+const tInput = document.getElementById('transcriptionInput');
+
+// ★ 커서 위치 강제 고정 함수 (항상 텍스트 끝으로 이동)
+const lockCaretToEnd = (el) => {
+    const len = el.value.length;
+    el.setSelectionRange(len, len);
+};
+
+// 사용자가 클릭, 터치, 선택 등을 할 때마다 커서를 강제로 끝으로 보냅니다.
+['click', 'select', 'focus', 'keyup', 'touchstart'].forEach(evt => {
+    tInput.addEventListener(evt, () => lockCaretToEnd(tInput));
+});
+
 document.getElementById('transcriptionModal').addEventListener('click', function(e) {
-    if (!e.target.closest('.transcription-close')) {
-        document.getElementById('transcriptionInput').focus();
+    if (!e.target.closest('.transcription-close') && !e.target.closest('.transcription-skip')) {
+        tInput.focus();
     }
 });
 
