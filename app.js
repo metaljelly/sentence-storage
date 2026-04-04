@@ -128,8 +128,9 @@ searchInput.addEventListener('input', (e) => {
     renderSentences();
 });
 
+// [중간] 필터 및 셔플 로직
 window.setFilter = (type) => {
-    currentFilter = type;
+    currentFilter = type; // 'shuffle' 관련 로직 삭제 
     document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
     document.getElementById('tab-' + type).classList.add('active');
     renderSentences();
@@ -388,25 +389,39 @@ window.openTranscription = (id) => {
 window.closeTranscription = () => { 
     document.getElementById('transcriptionModal').classList.add('hidden'); 
     document.getElementById('transcriptionInput').blur();
-    document.getElementById('transcriptionText').classList.remove('finished');
     document.body.style.overflow = ''; 
+    // renderSentences()를 호출하지 않음으로써 이전 리스트와 스크롤 위치 유지 
 };
 
+// [하단] 필사 및 건너뛰기 핵심 로직
+window.skipTranscription = () => {
+    const combined = [...firebaseSentences, ...localSentences];
+    if (combined.length === 0) return alert("필사할 문장이 없습니다.");
+    
+    let next;
+    do {
+        next = combined[Math.floor(Math.random() * combined.length)];
+    } while (combined.length > 1 && next.content === currentTranscriptionText);
+    
+    window.openTranscription(next.id); // 현재 탭 상태와 무관하게 모달만 실행 
+};
+
+// 필사 완료 시 자동 다음 문장 제안 (transcriptionInput 이벤트 리스너 내 수정)
 document.getElementById('transcriptionInput').addEventListener('input', function() {
-    let val = this.value; 
-    if(val.length > currentTranscriptionText.length) {
-        val = val.substring(0, currentTranscriptionText.length);
-        this.value = val;
-    }
+    let val = this.value;
+    if(val.length > currentTranscriptionText.length) val = val.substring(0, currentTranscriptionText.length);
     updateTranscriptionVisuals(val);
     
-    if(val.length === currentTranscriptionText.length) {
-        document.getElementById('transcriptionText').classList.add('finished');
-        document.getElementById('transcriptionProgress').innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-        document.getElementById('transcriptionProgress').style.color = 'var(--text-color)';
-        this.blur();
-        setTimeout(window.closeTranscription, 1200);
-    }
+if(val.length === currentTranscriptionText.length) {
+    document.getElementById('transcriptionText').classList.add('finished');
+    this.blur();
+    
+    // 완료 시 자동으로 다음 문장을 보여줄지, 닫을지 선택 가능
+    // 여기서는 흐름을 위해 다음 문장으로 바로 연결합니다.
+    setTimeout(() => {
+        window.skipTranscription(); 
+    }, 2000);
+}
 });
 
 document.addEventListener('keydown', function(e) {

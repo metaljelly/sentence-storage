@@ -21,6 +21,14 @@ body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI",
 
 /* 상단 UI */
 .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; min-height: 30px; }
+.header-left { display: flex; gap: 8px; align-items: center; }
+/* 테마 버튼과 동일한 느낌의 액션 버튼 */
+.action-btn { 
+    background: transparent; border: none; color: var(--muted-color); 
+    cursor: pointer; padding: 8px; border-radius: 50%; 
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center; 
+}
+.action-btn:hover { background: var(--border-color); color: var(--text-color); }
 .theme-btn { background: transparent; border: none; color: var(--muted-color); cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
 .theme-btn:hover { background: var(--border-color); color: var(--text-color); }
 #authSection { display: flex; align-items: center; justify-content: flex-end; flex-grow: 1; }
@@ -156,15 +164,9 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
     flex-shrink: 0; 
 }
 .transcription-text, .transcription-input {
-    /* 두 요소의 폰트 속성을 완전히 일치시켜야 위치가 어긋나지 않음 */
-    font-size: 2rem; 
-    font-weight: 400; 
-    line-height: 1.8; 
-    font-family: inherit;
-    white-space: pre-wrap; 
-    word-break: break-word; 
-    overflow-wrap: anywhere; 
-    text-align: center; /* 입력창도 반드시 중앙 정렬 */
+    font-family: 'Pretendard', sans-serif;
+    font-size: 2rem; font-weight: 400; line-height: 1.8;
+    text-align: center; white-space: pre-wrap; word-break: break-word;
 }
 .transcription-text { 
     color: var(--border-color); 
@@ -192,6 +194,31 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
     outline: none; 
     caret-color: transparent; /* 커서 자체도 투명하게 처리 */
 }
+
+/* 건너뛰기 버튼 스타일 */
+.transcription-skip {
+    position: fixed; 
+    top: 32px; 
+    right: 85px; /* 닫기 버튼(right: 30px) 왼쪽에 적절히 배치 */
+    background: transparent; 
+    border: none; 
+    color: var(--muted-color); 
+    cursor: pointer; 
+    padding: 10px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: all 0.2s; 
+    z-index: 10000;
+}
+
+/* 호버 시 테마 버튼과 동일한 피드백 제공 */
+.transcription-skip:hover { 
+    background: var(--border-color); 
+    color: var(--text-color); 
+}
+
 .transcription-progress { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 1rem; color: var(--muted-color); font-weight: 500; letter-spacing: 2px; transition: color 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10000; }
 .transcription-text.finished { animation: finishGlow 1.2s ease-out forwards; }
 @keyframes finishGlow { 0% { transform: scale(1); filter: brightness(1); } 30% { transform: scale(1.02); filter: brightness(1.2); } 100% { transform: scale(1); filter: brightness(1); } }
@@ -201,7 +228,11 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
 @media (max-width: 640px) {
     textarea { font-size: 1.15rem; } 
     textarea::placeholder { font-size: 1.1rem; }
-    
+    .transcription-skip { 
+        top: auto; 
+        bottom: 30px; 
+        right: 20px; /* 모바일 하단 닫기 버튼 옆 배치 */
+    }
     .transcription-text, .transcription-input { 
         font-size: 1.4rem; 
         line-height: 1.7; 
