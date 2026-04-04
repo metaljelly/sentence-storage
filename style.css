@@ -227,7 +227,10 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
 
 @media (max-width: 640px) {
     textarea { font-size: 1.15rem; } 
-    textarea::placeholder { font-size: 1.1rem; }
+    textarea::placeholder { font-size: 1.05rem; }
+    .input-box {
+        padding: 20px 16px; 
+    }
     .transcription-skip { 
         top: auto; 
         bottom: 30px; 
