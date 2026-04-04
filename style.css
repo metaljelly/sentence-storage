@@ -146,13 +146,52 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
 }
 .transcription-close:hover { color: var(--text-color); }
 .transcription-modal::before, .transcription-modal::after { content: ''; margin: auto; }
-.transcription-container { position: relative; max-width: 800px; width: 100%; text-align: center; padding: 60px 0; box-sizing: border-box; flex-shrink: 0; }
-.transcription-text { font-size: 2rem; font-weight: 400; line-height: 1.8; color: var(--border-color); white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; position: relative; z-index: 1; user-select: none; transition: color 0.3s; }
+.transcription-container { 
+    position: relative; 
+    max-width: 800px; 
+    width: 100%; 
+    text-align: center; /* 중앙 정렬 */
+    padding: 60px 0; 
+    box-sizing: border-box; 
+    flex-shrink: 0; 
+}
+.transcription-text, .transcription-input {
+    /* 두 요소의 폰트 속성을 완전히 일치시켜야 위치가 어긋나지 않음 */
+    font-size: 2rem; 
+    font-weight: 400; 
+    line-height: 1.8; 
+    font-family: inherit;
+    white-space: pre-wrap; 
+    word-break: break-word; 
+    overflow-wrap: anywhere; 
+    text-align: center; /* 입력창도 반드시 중앙 정렬 */
+}
+.transcription-text { 
+    color: var(--border-color); 
+    position: relative; 
+    z-index: 1; 
+    user-select: none; 
+    transition: color 0.3s; 
+}
 .transcription-text span.correct { color: var(--text-color); transition: color 0.1s; }
 .transcription-text span.incorrect { color: #ef4444; opacity: 0.8; }
 .transcription-text span.next-char { border-bottom: 3px solid var(--muted-color); }
 .transcription-text span.composing-char { border-bottom: 3px solid var(--text-color); color: var(--text-color); }
-.transcription-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 2; cursor: text; resize: none; font-size: 16px; color: transparent; background: transparent; border: none; outline: none; }
+.transcription-input { 
+    position: absolute; 
+    top: 60px; /* .transcription-container의 padding-top과 일치시켜야 함 */
+    left: 0; 
+    width: 100%; 
+    height: calc(100% - 120px); /* padding 위아래 제외한 높이 */
+    opacity: 0; /* 완전히 투명하게 유지 */
+    z-index: 2; 
+    cursor: text; 
+    resize: none; 
+    background: transparent; 
+    border: none; 
+    outline: none; 
+    caret-color: transparent; /* 커서 자체도 투명하게 처리 */
+}
 .transcription-progress { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 1rem; color: var(--muted-color); font-weight: 500; letter-spacing: 2px; transition: color 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10000; }
 .transcription-text.finished { animation: finishGlow 1.2s ease-out forwards; }
 @keyframes finishGlow { 0% { transform: scale(1); filter: brightness(1); } 30% { transform: scale(1.02); filter: brightness(1.2); } 100% { transform: scale(1); filter: brightness(1); } }
@@ -163,6 +202,9 @@ input[type="text"]:focus { border-bottom-color: var(--text-color); color: var(--
     textarea { font-size: 1.15rem; } 
     textarea::placeholder { font-size: 1.1rem; }
     
-    .transcription-text { font-size: 1.4rem; line-height: 1.7; }
+    .transcription-text, .transcription-input { 
+        font-size: 1.4rem; 
+        line-height: 1.7; 
+    }
     .transcription-modal { padding: 60px 20px 100px 20px; }
 }

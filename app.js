@@ -94,14 +94,32 @@ document.addEventListener('click', e => {
     if (!isShowing) dropdown.classList.add('show');
 });
 
-// [다크모드 제어]
+// [다크모드 및 아이콘 제어]
+const themeBtn = document.querySelector('.theme-btn');
+
+// 아이콘 SVG 정의
+const sunIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+const moonIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+// 테마에 따라 아이콘을 업데이트하는 함수
+function updateThemeIcon(theme) {
+    if (!themeBtn) return;
+    // 다크모드일 때는 해(light로 전환), 라이트모드일 때는 달(dark로 전환) 아이콘 표시
+    themeBtn.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
+}
+
+// 초기 테마 설정 적용
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
 window.toggleTheme = () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme); // 테마 변경 시 아이콘도 함께 변경
 };
 
 // [검색 및 필터링]
@@ -317,15 +335,23 @@ window.editSentence = (id) => {
 window.toggleLike = async (id) => {
     if (String(id).startsWith('local_')) return alert("로컬 문장은 좋아요를 누를 수 없습니다.");
     if (!currentUser) return alert("로그인이 필요합니다.");
+    
     const s = firebaseSentences.find(x => x.id === id);
     if (!s) return;
-    const likedBy = s.likedBy || [];
+
+    // ★ 수정: 데이터 객체(s)의 likedBy 속성이 없으면 배열로 초기화합니다.
+    if (!s.likedBy) s.likedBy = []; 
+    
+    const likedBy = s.likedBy;
     const docRef = doc(db, "sentences", id);
+
     if (likedBy.includes(currentUser.uid)) {
         await updateDoc(docRef, { likedBy: arrayRemove(currentUser.uid) });
+        // 배열 필터링 후 다시 할당
         s.likedBy = likedBy.filter(u => u !== currentUser.uid);
     } else {
         await updateDoc(docRef, { likedBy: arrayUnion(currentUser.uid) });
+        // 이제 s.likedBy가 배열임이 보장되므로 push가 가능합니다.
         s.likedBy.push(currentUser.uid);
     }
     renderSentences();
