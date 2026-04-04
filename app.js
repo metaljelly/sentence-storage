@@ -97,18 +97,14 @@ document.addEventListener('click', e => {
 // [다크모드 및 아이콘 제어]
 const themeBtn = document.querySelector('.theme-btn');
 
-// 아이콘 SVG 정의
 const sunIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
 const moonIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
 
-// 테마에 따라 아이콘을 업데이트하는 함수
 function updateThemeIcon(theme) {
     if (!themeBtn) return;
-    // 다크모드일 때는 해(light로 전환), 라이트모드일 때는 달(dark로 전환) 아이콘 표시
     themeBtn.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
 }
 
-// 초기 테마 설정 적용
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 updateThemeIcon(savedTheme);
@@ -116,10 +112,9 @@ updateThemeIcon(savedTheme);
 window.toggleTheme = () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme); // 테마 변경 시 아이콘도 함께 변경
+    updateThemeIcon(newTheme);
 };
 
 // [검색 및 필터링]
@@ -128,9 +123,8 @@ searchInput.addEventListener('input', (e) => {
     renderSentences();
 });
 
-// [중간] 필터 및 셔플 로직
 window.setFilter = (type) => {
-    currentFilter = type; // 'shuffle' 관련 로직 삭제 
+    currentFilter = type;
     document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
     document.getElementById('tab-' + type).classList.add('active');
     renderSentences();
@@ -200,7 +194,6 @@ function renderSentences() {
         const hasLiked = currentUser && sentence.likedBy?.includes(currentUser.uid);
         const likeCount = sentence.likedBy?.length || 0;
 
-        // ★ 사라졌던 SVG 아이콘 코드 복구
         const myDropdownItems = isMine ? `
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" onclick="window.editSentence('${sentence.id}')">
@@ -339,8 +332,6 @@ window.toggleLike = async (id) => {
     
     const s = firebaseSentences.find(x => x.id === id);
     if (!s) return;
-
-    // ★ 수정: 데이터 객체(s)의 likedBy 속성이 없으면 배열로 초기화합니다.
     if (!s.likedBy) s.likedBy = []; 
     
     const likedBy = s.likedBy;
@@ -348,11 +339,9 @@ window.toggleLike = async (id) => {
 
     if (likedBy.includes(currentUser.uid)) {
         await updateDoc(docRef, { likedBy: arrayRemove(currentUser.uid) });
-        // 배열 필터링 후 다시 할당
         s.likedBy = likedBy.filter(u => u !== currentUser.uid);
     } else {
         await updateDoc(docRef, { likedBy: arrayUnion(currentUser.uid) });
-        // 이제 s.likedBy가 배열임이 보장되므로 push가 가능합니다.
         s.likedBy.push(currentUser.uid);
     }
     renderSentences();
@@ -363,13 +352,11 @@ window.toggleLike = async (id) => {
 ========================================= */
 const tInput = document.getElementById('transcriptionInput');
 
-// ★ 커서 위치 강제 고정 함수 (항상 텍스트 끝으로 이동)
 const lockCaretToEnd = (el) => {
     const len = el.value.length;
     el.setSelectionRange(len, len);
 };
 
-// 사용자가 클릭, 터치, 선택 등을 할 때마다 커서를 강제로 끝으로 보냅니다.
 ['click', 'select', 'focus', 'keyup', 'touchstart'].forEach(evt => {
     tInput.addEventListener(evt, () => lockCaretToEnd(tInput));
 });
@@ -384,11 +371,9 @@ window.openTranscription = (id) => {
     const s = [...firebaseSentences, ...localSentences].find(x => x.id === id);
     if(!s) return;
     
-    // 한자 및 괄호 속 한자 필사 생략 로직
     let cleanText = s.content.replace(/\([\u4e00-\u9fa5\uF900-\uFAFF]+\)/g, '').replace(/[\u4e00-\u9fa5\uF900-\uFAFF]/g, '').trim();
     currentTranscriptionText = cleanText;
 
-    const tInput = document.getElementById('transcriptionInput');
     tInput.value = '';
     document.getElementById('transcriptionProgress').innerText = '0%';
     document.getElementById('transcriptionText').classList.remove('finished');
@@ -401,12 +386,10 @@ window.openTranscription = (id) => {
 
 window.closeTranscription = () => { 
     document.getElementById('transcriptionModal').classList.add('hidden'); 
-    document.getElementById('transcriptionInput').blur();
+    tInput.blur();
     document.body.style.overflow = ''; 
-    // renderSentences()를 호출하지 않음으로써 이전 리스트와 스크롤 위치 유지 
 };
 
-// [하단] 필사 및 건너뛰기 핵심 로직
 window.skipTranscription = () => {
     const combined = [...firebaseSentences, ...localSentences];
     if (combined.length === 0) return alert("필사할 문장이 없습니다.");
@@ -416,25 +399,23 @@ window.skipTranscription = () => {
         next = combined[Math.floor(Math.random() * combined.length)];
     } while (combined.length > 1 && next.content === currentTranscriptionText);
     
-    window.openTranscription(next.id); // 현재 탭 상태와 무관하게 모달만 실행 
+    window.openTranscription(next.id);
 };
 
-// 필사 완료 시 자동 다음 문장 제안 (transcriptionInput 이벤트 리스너 내 수정)
-document.getElementById('transcriptionInput').addEventListener('input', function() {
+tInput.addEventListener('input', function() {
+    lockCaretToEnd(this);
+    
     let val = this.value;
     if(val.length > currentTranscriptionText.length) val = val.substring(0, currentTranscriptionText.length);
     updateTranscriptionVisuals(val);
     
-if(val.length === currentTranscriptionText.length) {
-    document.getElementById('transcriptionText').classList.add('finished');
-    this.blur();
-    
-    // 완료 시 자동으로 다음 문장을 보여줄지, 닫을지 선택 가능
-    // 여기서는 흐름을 위해 다음 문장으로 바로 연결합니다.
-    setTimeout(() => {
-        window.skipTranscription(); 
-    }, 2000);
-}
+    if(val.length === currentTranscriptionText.length) {
+        document.getElementById('transcriptionText').classList.add('finished');
+        this.blur();
+        setTimeout(() => {
+            window.skipTranscription(); 
+        }, 1500);
+    }
 });
 
 document.addEventListener('keydown', function(e) {
@@ -452,15 +433,34 @@ function updateTranscriptionVisuals(typed) {
         const char = originalArr[i]; 
         const typedChar = typed[i];
         let className = ''; 
-        let displayStr = char;
+        let displayStr = char; 
         
-        if (i === typed.length) className = 'next-char';
-        else if (typedChar === undefined) className = '';
-        else {
-            displayStr = typedChar;
-            if (typedChar === char) className = 'correct';
-            else if (i === typed.length - 1) className = 'composing-char';
-            else className = 'incorrect';
+        if (i === typed.length) {
+            className = 'next-char';
+        } else if (i < typed.length) {
+            if (typedChar === char) {
+                className = 'correct';
+                displayStr = char;
+            } else {
+                // 오타 발생 시 처리
+                className = 'incorrect';
+                
+                // 사용자의 피드백 반영: 
+                // 글자를 입력해야 할 자리에 공백을 친 경우 -> 원문(char)을 빨간색으로 표시하여 가독성 유지
+                // 그 외 글자 오타의 경우 -> 사용자가 실제로 친 글자(typedChar)를 빨간색으로 표시
+                if (typedChar === ' ') {
+                    displayStr = char;
+                } else {
+                    // 마지막 입력 글자가 한글 조합 중일 수 있으므로 composing-char 스타일 활용 가능하지만, 
+                    // 여기서는 오타 기록을 명확히 보여주기 위해 typedChar를 그대로 노출
+                    displayStr = typedChar;
+                }
+                
+                // 단, 한글 조합 중인 마지막 글자의 시각적 어색함을 줄이기 위해 추가 처리
+                if (i === typed.length - 1 && typedChar !== ' ' && typedChar !== char) {
+                    className = 'composing-char incorrect';
+                }
+            }
         }
         
         const displayChar = displayStr === ' ' ? '&nbsp;' : displayStr === '\n' ? '<br>' : escapeHTML(displayStr);
@@ -470,7 +470,8 @@ function updateTranscriptionVisuals(typed) {
     tText.innerHTML = html;
     
     if (typed.length < currentTranscriptionText.length) {
-        document.getElementById('transcriptionProgress').style.color = 'var(--muted-color)';
-        document.getElementById('transcriptionProgress').innerText = Math.floor((typed.length / currentTranscriptionText.length) * 100) + '%';
+        const progressEl = document.getElementById('transcriptionProgress');
+        progressEl.style.color = 'var(--muted-color)';
+        progressEl.innerText = Math.floor((typed.length / currentTranscriptionText.length) * 100) + '%';
     }
 }
